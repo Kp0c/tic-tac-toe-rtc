@@ -118,12 +118,20 @@ export class GameController {
   }
 
   async joinViaConnectionCode(connectionCode) {
-    await this.#webRtcService.joinViaConnectionCode(connectionCode);
+    try {
+      await this.#webRtcService.joinViaConnectionCode(connectionCode);
 
-    this.myRole = ROLE.GUEST;
+      this.myRole = ROLE.GUEST;
+    } catch (err) {
+      this.errors$.next(err.message);
+    }
   }
 
   initGame() {
+    this.playAgainAgreedRoles = [];
+    this.gameBoard = Array(9).fill(0);
+    this.gameStage = GAME_STAGE.STARTED;
+
     if (this.myRole === ROLE.HOST) {
       // randomly select who goes first
       this.turn = Math.random() > 0.5 ? ROLE.HOST : ROLE.GUEST;
@@ -132,15 +140,12 @@ export class GameController {
         type: 'start',
         turn: this.turn,
       });
-    }
 
-    this.startGame();
+      this.startGame();
+    }
   }
 
   startGame() {
-    this.playAgainAgreedRoles = [];
-    this.gameBoard = Array(9).fill(0);
-    this.gameStage = GAME_STAGE.STARTED;
     window.location.hash = '#game';
   }
 

@@ -28,7 +28,7 @@ export class App extends BaseComponent {
     this.#selectRoute();
 
     this.#gameController.errors$.subscribe((error) => {
-      console.log(error);
+      console.error(error);
       const errorEl = document.createElement('div');
       errorEl.classList.add('error-message');
       errorEl.textContent = error?.error ?? error;

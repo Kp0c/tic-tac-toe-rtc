@@ -1,1 +1,26 @@
 @import '../../styles/common.css';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.answer-code-field {
+  display: flex;
+  gap: 1rem;
+
+  & #answer-code {
+    flex: 1;
+  }
+}

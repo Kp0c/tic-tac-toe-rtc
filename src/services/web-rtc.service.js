@@ -49,12 +49,9 @@ export class WebRtcService {
 
   async joinViaConnectionCode(connectionCode) {
     const offer = JSON.parse(atob(connectionCode));
-    console.log('setting remote description', offer);
     await this.#peerConnection.setRemoteDescription(offer);
 
-    console.log('creating answer');
     const answer = await this.#peerConnection.createAnswer();
-    console.log('setting local description', answer);
 
     await this.#peerConnection.setLocalDescription(answer);
 
@@ -65,8 +62,6 @@ export class WebRtcService {
   connectionMessages() {
     this.#peerConnection.onicecandidate = (event) => {
       if (!event.candidate) return;
-
-      console.warn('new candidate', event.candidate);
 
       const connectionCode = btoa(JSON.stringify(this.#peerConnection.localDescription));
       this.code$.next(connectionCode);
@@ -111,7 +106,6 @@ export class WebRtcService {
 
   async setAnswer(answer) {
     const answerObject = JSON.parse(atob(answer));
-    console.log('setting remote description', answerObject);
 
     await this.#peerConnection.setRemoteDescription(answerObject);
   }
