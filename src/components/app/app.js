@@ -1,44 +1,61 @@
 import template from './app.html?raw';
 import styles from './app.css?inline'
 import { BaseComponent } from '../base-component.js';
-import { WebRtcService } from '../../services/web-rtc.service.js';
+import { AppState } from '../../app-state.js';
 
 export class App extends BaseComponent {
+  #state = new AppState();
+
+  #router = {
+    'start': 'ttt-start-page',
+    'host': 'ttt-host-page',
+    'guest': 'ttt-guest-page',
+    'game': 'ttt-game-page',
+  }
+
   constructor() {
     super(template, styles);
 
-    const webRtc = new WebRtcService();
-    this.shadowRoot.getElementById('create')
-      .addEventListener('click', () => {
-        webRtc.createConnectionCode();
-      }, {
-        signal: this.destroyedSignal,
-      });
+    this.#state.webRtcService.connectionState$.subscribe((state) => {
+      if (state === 'connected') {
+        window.location.hash = 'game';
+      }
+    }, {
+      signal: this.destroyedSignal
+    });
+  }
 
-    this.shadowRoot.getElementById('join')
-      .addEventListener('click', () => {
-        const code = this.shadowRoot.getElementById('code').value;
+  connectedCallback() {
+    window.addEventListener('hashchange', () => {
+      this.#selectRoute();
+    }, {
+      signal: this.destroyedSignal,
+    });
 
-        console.log('trying to join via code', code);
-        webRtc.tryToJoinViaConnectionCode(code);
-      }, {
-        signal: this.destroyedSignal,
-      });
+    this.#selectRoute();
+  }
 
-    this.shadowRoot.getElementById('answer')
-      .addEventListener('click', () => {
-        const answer = this.shadowRoot.getElementById('code').value;
+  #selectRoute() {
+    const { hash } = window.location;
+    const location = hash.replace('#', '');
 
-        console.log('Set answer', answer);
-        webRtc.setAnswer(answer);
-      });
+    const page = this.#router[location];
 
-    this.shadowRoot.getElementById('msg')
-      .addEventListener('click', () => {
-        console.log('sending message');
+    if (!page) {
+      window.location.hash = 'start';
+    }
 
-        const message = this.shadowRoot.getElementById('code').value;
-        webRtc.sendMessage(message);
-      });
+    const routerSlot = this.shadowRoot.getElementById('router-slot');
+    routerSlot.innerHTML = '';
+    const element = document.createElement(page);
+    routerSlot.appendChild(element);
+
+    // small delay to init component
+    setTimeout(() => {
+      console.log(element.setAppState);
+      if (typeof element.setAppState === 'function') {
+        element.setAppState(this.#state);
+      }
+    });
   }
 }

@@ -12,17 +12,23 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 
 ## Project structure
 - `components` - Project is using component-based approach with custom elements. Components are using `ttt-` prefix that means "tic-tac-toe."
-    - The `ttt-app` component is the main component containing the whole app.
-    - The `tmp-counter` component is responsible for the counter
+    - The `ttt-app` component is the main component containing the whole app, routing logic and app state.
+    - The `ttt-start-page` component is responsible for the Start Page UI
+    - The `ttt-host-page` component is responsible for Host Page UI
+    - The `ttt-guest-page` component is responsible for Guest Page UI
+    - The `ttt-game-page` component is responsible for running the game page
 - `helpers` - Helper classes
     - `math.helper` - Math functions that are not defined in the default Math class
 - `services` - Services
-  - `web-rtc.service`
+  - `web-rtc.service` - WebRtc implementation
+  - `observable` - Observable implementation to add reactivity to the app
 - `styles` - additional styles
     - `common` - styles that are common for the app and most likely needed in most/all components
 - `main.js` - file defines all components
 
 ## Available functionality
+- Host game
+- Join to game
 
 ## How to run
 1. Clone the repo
@@ -36,7 +42,7 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 
 # TODO
 - [x] WebRTC connection
-- [ ] Connection setup
+- [x] Connection setup
     - Generate unique game session with a connection link or code
     - Player 2 can connect to the link to establish connection
     - Once player 2 connects, game starts

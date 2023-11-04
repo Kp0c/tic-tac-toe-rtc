@@ -1,19 +1,34 @@
+import { Observable } from '../helpers/observable.js';
+
 export class WebRtcService {
   #peerConnection = new RTCPeerConnection({
     iceServers: [{
       urls: 'stun:stun.l.google.com:19302'
     }]
   });
+
   #dataChannel = this.#peerConnection.createDataChannel('data', {
     ordered: true,
   });
+
+  /**
+   * Host/Answer codes
+   * @type {Observable}
+   */
+  code$ = new Observable();
+
+  /**
+   *
+   * @type {Observable}
+   */
+  connectionState$ = new Observable();
 
   constructor() {
     this.logDebug();
     this.logChannel();
   }
 
-  async createConnectionCode() {
+  async startHost() {
     const offer = await this.#peerConnection.createOffer();
     await this.#peerConnection.setLocalDescription(offer);
   }
@@ -27,20 +42,10 @@ export class WebRtcService {
     const answer = await this.#peerConnection.createAnswer();
     console.log('setting local description', answer);
 
-    const answerCode = btoa(JSON.stringify(answer));
-
-    console.log(answerCode);
-
-
-    // copy to clipboard
-    const el = document.createElement('textarea');
-    el.value = answerCode;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-
     await this.#peerConnection.setLocalDescription(answer);
+
+    const answerCode = btoa(JSON.stringify(answer));
+    this.code$.next(answerCode);
   }
 
   logDebug() {
@@ -50,23 +55,11 @@ export class WebRtcService {
       console.warn('new candidate', event.candidate);
 
       const connectionCode = btoa(JSON.stringify(this.#peerConnection.localDescription));
-      console.log(connectionCode);
-
-      // copy to clipboard
-      const el = document.createElement('textarea');
-      el.value = connectionCode;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
+      this.code$.next(connectionCode);
     }
 
     this.#peerConnection.onconnectionstatechange = (event) => {
-      console.log(this.#peerConnection.connectionState);
-
-      if (this.#peerConnection.connectionState === 'connected') {
-        console.log('RTCPeerConnection is connected');
-      }
+      this.connectionState$.next(this.#peerConnection.connectionState);
     }
 
     this.#peerConnection.ondatachannel = (event) => {
