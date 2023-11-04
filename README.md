@@ -17,15 +17,19 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
     - The `ttt-host-page` component is responsible for Host Page UI
     - The `ttt-guest-page` component is responsible for Guest Page UI
     - The `ttt-game-page` component is responsible for running the game page
+    - The `ttt-finish-page` component is responsible for the game over page
+    - `base-component.js` - Base component that is used as a base for all components
 - `helpers` - Helper classes
-    - `math.helper` - Math functions that are not defined in the default Math class
+    - `game.helper` - Functions that are helping calculating game logic
+    - `observable` - Observable implementation to add reactivity to the app
 - `services` - Services
   - `web-rtc.service` - WebRtc implementation
-  - `observable` - Observable implementation to add reactivity to the app
 - `styles` - additional styles
     - `common` - styles that are common for the app and most likely needed in most/all components
 - `main.js` - file defines all components
+- `main.css` - main css file that defines some top-level styles
 - `game-controller.js` - file defines the game controller that is responsible for the game logic
+- `enums.js` - enums ¯\_(ツ)_/¯
 
 ## Available functionality
 - Host game
