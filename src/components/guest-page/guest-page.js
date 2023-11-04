@@ -1,7 +1,6 @@
 import template from './guest-page.html?raw';
 import styles from './guest-page.css?inline'
 import { BaseComponent } from '../base-component.js';
-import { WebRtcService } from '../../services/web-rtc.service.js';
 
 
 /**
@@ -31,21 +30,21 @@ export class GuestPage extends BaseComponent {
   #state = new State();
 
   /**
-   * @type {WebRtcService}
+   * @type {GameController}
    */
-  #webRtcService;
+  #gameController;
 
   constructor() {
     super(template, styles);
   }
 
   /**
-   * Set's app state and initializes component
+   * Set's game controller and initializes component
    *
-   * @param {AppState} state
+   * @param {GameController} gameController
    */
-  setAppState(state) {
-    this.#webRtcService = state.webRtcService;
+  setGameController(gameController) {
+    this.#gameController = gameController;
 
     this.init().catch(console.error);
 
@@ -69,7 +68,7 @@ export class GuestPage extends BaseComponent {
       this.#connect().catch(console.error);
     });
 
-    this.#webRtcService.code$.subscribe((code) => {
+    this.#gameController.code$.subscribe((code) => {
       this.#state.answerCode = code;
       this.#render();
     }, {
@@ -78,7 +77,7 @@ export class GuestPage extends BaseComponent {
   }
 
   async #connect() {
-    await this.#webRtcService.tryToJoinViaConnectionCode(this.#state.hostCode);
+    await this.#gameController.joinViaConnectionCode(this.#state.hostCode);
   }
 
   #render() {

@@ -1,1 +1,53 @@
 @import '../../styles/common.css';
+
+:host {
+  --cell-size: 50px;
+}
+
+#game-container {
+  display: grid;
+  grid-template-columns: repeat(3, var(--cell-size));
+  gap: 5px;
+}
+
+.box {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background-color: red;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.available {
+    cursor: pointer;
+  }
+
+  &.x, &.o {
+    cursor: not-allowed;
+    box-shadow: inset 0 0 5px black;
+
+    &:before {
+      font-size: 2rem;
+      font-weight: bold;
+      text-shadow: 5px 5px 5px black;
+      color: white;
+    }
+  }
+
+  &.x {
+    background-color: blue;
+
+    &:before {
+      content: 'X';
+    }
+  }
+
+  &.o {
+    background-color: green;
+
+    &:before {
+      content: 'O';
+    }
+  }
+}

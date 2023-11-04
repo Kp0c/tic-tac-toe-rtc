@@ -11,6 +11,8 @@ export class WebRtcService {
     ordered: true,
   });
 
+  #isDataChannelOpen = false;
+
   /**
    * Host/Answer codes
    * @type {Observable}
@@ -23,9 +25,21 @@ export class WebRtcService {
    */
   connectionState$ = new Observable();
 
+  /**
+   * Fires when error happened
+   * @type {Observable}
+   */
+  errors$ = new Observable();
+
+  /**
+   * Fires when a message received from another peer
+   * @type {Observable}
+   */
+  messages$ = new Observable();
+
   constructor() {
-    this.logDebug();
-    this.logChannel();
+    this.connectionMessages();
+    this.channelMessages();
   }
 
   async startHost() {
@@ -33,7 +47,7 @@ export class WebRtcService {
     await this.#peerConnection.setLocalDescription(offer);
   }
 
-  async tryToJoinViaConnectionCode(connectionCode) {
+  async joinViaConnectionCode(connectionCode) {
     const offer = JSON.parse(atob(connectionCode));
     console.log('setting remote description', offer);
     await this.#peerConnection.setRemoteDescription(offer);
@@ -48,7 +62,7 @@ export class WebRtcService {
     this.code$.next(answerCode);
   }
 
-  logDebug() {
+  connectionMessages() {
     this.#peerConnection.onicecandidate = (event) => {
       if (!event.candidate) return;
 
@@ -63,32 +77,31 @@ export class WebRtcService {
     }
 
     this.#peerConnection.ondatachannel = (event) => {
-      console.log(event);
       this.#dataChannel = event.channel;
 
-      this.logChannel();
+      this.channelMessages();
     }
 
     this.#peerConnection.onicecandidateerror = (event) => {
-      console.error(event);
+      this.errors$.next(event);
     }
   }
 
-  logChannel() {
+  channelMessages() {
     this.#dataChannel.onopen = (event) => {
-      console.log('open', event);
+      this.#isDataChannelOpen = true;
     }
 
     this.#dataChannel.onclose = (event) => {
-      console.log('close', event);
+      this.#isDataChannelOpen = false;
     }
 
     this.#dataChannel.onerror = (event) => {
-      console.error(event);
+      this.errors$.next(event);
     }
 
     this.#dataChannel.onmessage = (event) => {
-      console.log('msg', event);
+      this.messages$.next(JSON.parse(event.data));
     }
   }
 
@@ -100,6 +113,11 @@ export class WebRtcService {
   }
 
   sendMessage(message) {
-    this.#dataChannel.send(message);
+    if (!this.#isDataChannelOpen) {
+      this.errors$.next('Data channel is not open');
+      return;
+    }
+
+    this.#dataChannel.send(JSON.stringify(message));
   }
 }

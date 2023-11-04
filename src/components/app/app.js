@@ -1,10 +1,10 @@
 import template from './app.html?raw';
 import styles from './app.css?inline'
 import { BaseComponent } from '../base-component.js';
-import { AppState } from '../../app-state.js';
+import { GameController } from '../../game-controller.js';
 
 export class App extends BaseComponent {
-  #state = new AppState();
+  #gameController = new GameController();
 
   #router = {
     'start': 'ttt-start-page',
@@ -15,14 +15,6 @@ export class App extends BaseComponent {
 
   constructor() {
     super(template, styles);
-
-    this.#state.webRtcService.connectionState$.subscribe((state) => {
-      if (state === 'connected') {
-        window.location.hash = 'game';
-      }
-    }, {
-      signal: this.destroyedSignal
-    });
   }
 
   connectedCallback() {
@@ -52,9 +44,8 @@ export class App extends BaseComponent {
 
     // small delay to init component
     setTimeout(() => {
-      console.log(element.setAppState);
-      if (typeof element.setAppState === 'function') {
-        element.setAppState(this.#state);
+      if (typeof element.setGameController === 'function') {
+        element.setGameController(this.#gameController);
       }
     });
   }

@@ -1,7 +1,6 @@
 import template from './host-page.html?raw';
 import styles from './host-page.css?inline'
 import { BaseComponent } from '../base-component.js';
-import { WebRtcService } from '../../services/web-rtc.service.js';
 
 /**
  * Represents a UserProfile component state.js.
@@ -30,21 +29,21 @@ export class HostPage extends BaseComponent {
   #state = new State();
 
   /**
-   * @type {WebRtcService}
+   * @type {GameController}
    */
-  #webRtcService;
+  #gameController;
 
   constructor() {
     super(template, styles);
   }
 
   /**
-   * Set's app state and initializes component
+   * Set's game controller and initializes component
    *
-   * @param {AppState} state
+   * @param {GameController} gameController
    */
-  setAppState(state) {
-    this.#webRtcService = state.webRtcService;
+  setGameController(gameController) {
+    this.#gameController = gameController;
 
     this.init().catch(console.error);
 
@@ -68,7 +67,7 @@ export class HostPage extends BaseComponent {
       this.#connect().catch(console.error);
     });
 
-    this.#webRtcService.code$.subscribe((code) => {
+    this.#gameController.code$.subscribe((code) => {
       this.#state.hostCode = code;
       this.#render();
     }, {
@@ -76,11 +75,11 @@ export class HostPage extends BaseComponent {
       pushLatestValue: true
     });
 
-    await this.#webRtcService.startHost();
+    await this.#gameController.startHost();
   }
 
   async #connect() {
-    await this.#webRtcService.setAnswer(this.#state.answerCode);
+    await this.#gameController.setAnswerCode(this.#state.answerCode);
   }
 
   #render() {

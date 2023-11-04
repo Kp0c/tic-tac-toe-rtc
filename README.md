@@ -29,6 +29,7 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 ## Available functionality
 - Host game
 - Join to game
+- Make move and sync it with the opponent
 
 ## How to run
 1. Clone the repo
@@ -46,7 +47,7 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
     - Generate unique game session with a connection link or code
     - Player 2 can connect to the link to establish connection
     - Once player 2 connects, game starts
-- [ ] Create 3x3 grid
+- [x] Create 3x3 grid
 - [ ] Starting the game
   - Players decide who goes first by mutual agreement or a random method implemented by the developer.
   - The interface shows which player's turn it is.
