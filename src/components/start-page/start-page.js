@@ -5,7 +5,9 @@ import { BaseComponent } from '../base-component.js';
 export class StartPage extends BaseComponent {
   constructor() {
     super(template, styles);
+  }
 
+  connectedCallback() {
     this.shadowRoot.getElementById('host')
       .addEventListener('click', () => {
         window.location.hash = '#host';
@@ -13,7 +15,7 @@ export class StartPage extends BaseComponent {
         signal: this.destroyedSignal,
       });
 
-    this.shadowRoot.getElementById('join')
+    this.shadowRoot.getElementById('guest')
       .addEventListener('click', () => {
         window.location.hash = '#guest';
       }, {
