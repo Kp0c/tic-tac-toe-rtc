@@ -83,6 +83,10 @@ export class WebRtcService {
     }
 
     this.#peerConnection.onicecandidateerror = (event) => {
+      // ignore RTCPeerConnectionIceErrorEvent events
+      if (event instanceof RTCPeerConnectionIceErrorEvent) {
+        return;
+      }
       this.errors$.next(event);
     }
   }
@@ -127,5 +131,11 @@ export class WebRtcService {
     }
 
     this.#dataChannel.send(JSON.stringify(message));
+  }
+
+  close() {
+    this.#peerConnection.close();
+
+    this.#dataChannel.close();
   }
 }

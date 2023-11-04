@@ -82,6 +82,15 @@ export class GameController {
     });
 
     this.#webRtcService.errors$.subscribe((error) => {
+      // We cannot proceed when RTCErrorEvent happened. It's fatal. So we need to stop the game
+      if (error instanceof RTCErrorEvent) {
+        error = 'Connection error. Please start a new game';
+        this.gameStage = GAME_STAGE.NONE;
+        this.#webRtcService.close();
+        this.#webRtcService = new WebRtcService();
+
+        this.update$.next();
+      }
       this.errors$.next(error);
     });
 
@@ -136,14 +145,24 @@ export class GameController {
   }
 
   makeMove(index) {
-    this.markMove(index, this.myRole);
+    const result = this.markMove(index, this.myRole);
 
-    this.#webRtcService.sendMessage({
-      type: 'move',
-      index,
-    });
+    if (result) {
+      this.#webRtcService.sendMessage({
+        type: 'move',
+        index,
+      });
+    }
   }
 
+  /**
+   * Marks move on the board
+   * Returns true if move was successful
+   *
+   * @param {number} index index of the cell
+   * @param {number} role role of the player
+   * @returns {boolean} returns true if move was successful
+   */
   markMove(index, role) {
     if (this.gameStage !== GAME_STAGE.STARTED) {
       this.errors$.next('Game is not started');

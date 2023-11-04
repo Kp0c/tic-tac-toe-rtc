@@ -35,6 +35,7 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 - Randomly decide who goes first
 - Show who plays what and whose turn is right now
 - Users can start playing again without new WebRTC connection
+- Error handling
 
 ## How to run
 1. Clone the repo
@@ -62,15 +63,9 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
   - Win/loss/draw message
 - [x] Game ending
   - Players can choose to play again without new WebRTC connection
-- [ ] Error handling
+- [x] Error handling
   - If a player loses connection, the game should end and the other player should be notified.
-  - If a player tries to connect to a game session that does not exist, they should be notified.
-  - If a player tries to connect to a game session that already has two players, they should be notified.
-  - If a player tries to connect to a game session that has already ended, they should be notified.
-  - If a player tries to make a move before the game has started, they should be notified.
   - If a player tries to make a move when it is not their turn, they should be notified.
-  - If a player tries to make an invalid move, they should be notified.
-  - If a player tries to make a move after the game has ended, they should be notified.
 - [ ] Mobile UI
 - [ ] Animations
 - [ ] New Game

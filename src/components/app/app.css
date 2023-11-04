@@ -1,1 +1,16 @@
 @import '../../styles/common.css';
+
+.error-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  background-color: #c0131d;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 0;
+  padding: 0.5rem;
+  text-align: center;
+  width: 100%;
+}
