@@ -34,6 +34,7 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 - Win/loss/draw message
 - Randomly decide who goes first
 - Show who plays what and whose turn is right now
+- Users can start playing again without new WebRTC connection
 
 ## How to run
 1. Clone the repo
@@ -72,3 +73,6 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
   - If a player tries to make a move after the game has ended, they should be notified.
 - [ ] Mobile UI
 - [ ] Animations
+
+# Bugs
+- [ ] Random player start is not synced!

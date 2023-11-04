@@ -26,6 +26,10 @@ export class GameController {
     [ROLE.GUEST]: CELL_STATE.O,
   }
 
+  /**
+   * Current turn
+   * @type {number}
+   */
   turn = ROLE.HOST;
 
   /**
@@ -33,6 +37,12 @@ export class GameController {
    * @type {number}
    */
   gameStage = GAME_STAGE.NONE;
+
+  /**
+   * Shows what roles are ready to play again
+   * @type {[]}
+   */
+  playAgainAgreedRoles = [];
 
   /**
    * Host/Answer codes
@@ -76,8 +86,11 @@ export class GameController {
     });
 
     this.#webRtcService.messages$.subscribe((message) => {
+      const opponentRole = this.myRole === ROLE.HOST ? ROLE.GUEST : ROLE.HOST;
       if (message.type === 'move') {
-        this.markMove(message.index, this.myRole === ROLE.HOST ? ROLE.GUEST : ROLE.HOST);
+        this.markMove(message.index, opponentRole);
+      } else if (message.type === 'play-again') {
+        this.markPlayAgain(opponentRole);
       }
     });
   }
@@ -99,6 +112,8 @@ export class GameController {
   }
 
   initGame() {
+    this.playAgainAgreedRoles = [];
+
     this.gameBoard = Array(9).fill(0);
 
     // randomly select who goes first
@@ -165,5 +180,24 @@ export class GameController {
     }
 
     return GAME_RESULT.LOSE;
+  }
+
+  playAgain() {
+    this.#webRtcService.sendMessage({
+      type: 'play-again',
+    });
+
+    this.markPlayAgain(this.myRole);
+  }
+
+  markPlayAgain(role) {
+    if (!this.playAgainAgreedRoles.includes(role)) {
+      this.playAgainAgreedRoles.push(role);
+      this.update$.next();
+    }
+
+    if (this.playAgainAgreedRoles.length === 2) {
+      this.initGame();
+    }
   }
 }
