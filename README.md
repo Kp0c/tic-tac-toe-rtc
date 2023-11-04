@@ -36,6 +36,10 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 - Show who plays what and whose turn is right now
 - Users can start playing again without new WebRTC connection
 - Error handling
+- Responsive UI
+
+## Known issues
+- Copy is not working on mobile
 
 ## How to run
 1. Clone the repo
@@ -66,7 +70,7 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 - [x] Error handling
   - If a player loses connection, the game should end and the other player should be notified.
   - If a player tries to make a move when it is not their turn, they should be notified.
-- [ ] Mobile UI
+- [x] Mobile UI
 - [ ] Animations
 - [ ] New Game
 
