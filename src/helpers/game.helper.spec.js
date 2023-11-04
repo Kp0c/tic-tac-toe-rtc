@@ -42,4 +42,26 @@ describe('GameHelper', () => {
       expect(GameHelper.tryToGetWinner(gameState)).toBe(2);
     });
   });
+
+  describe('areThereAvailableMoves', () => {
+    it('returns true if there are available moves', () => {
+      const gameState = [
+        0, 1, 2,
+        2, 2, 1,
+        1, 2, 1,
+      ];
+
+      expect(GameHelper.areThereAvailableMoves(gameState)).toBe(true);
+    });
+
+    it('returns false if there are no available moves', () => {
+      const gameState = [
+        1, 1, 1,
+        2, 2, 1,
+        1, 2, 1,
+      ];
+
+      expect(GameHelper.areThereAvailableMoves(gameState)).toBe(false);
+    });
+  });
 });

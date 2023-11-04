@@ -25,11 +25,14 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 - `styles` - additional styles
     - `common` - styles that are common for the app and most likely needed in most/all components
 - `main.js` - file defines all components
+- `game-controller.js` - file defines the game controller that is responsible for the game logic
 
 ## Available functionality
 - Host game
 - Join to game
 - Make move and sync it with the opponent
+- Win/loss/draw message
+- Randomly decide who goes first
 
 ## How to run
 1. Clone the repo

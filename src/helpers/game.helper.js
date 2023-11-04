@@ -40,4 +40,14 @@ export class GameHelper {
 
     return CELL_STATE.Empty;
   }
+
+  /**
+   * Returns true if there are available moves. False otherwise.
+   *
+   * @param {number[]} gameState - The game state.
+   * @returns {boolean} - True if there are available moves. False otherwise.
+   */
+  static areThereAvailableMoves(gameState) {
+    return gameState.some((cellState) => cellState === CELL_STATE.Empty);
+  }
 }

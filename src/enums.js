@@ -15,3 +15,9 @@ export const GAME_STAGE = {
   STARTED: 1,
   FINISHED: 2,
 }
+
+export const GAME_RESULT = {
+  DRAW: 0,
+  WIN: 1,
+  LOSE: 2
+}

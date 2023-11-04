@@ -11,6 +11,7 @@ export class App extends BaseComponent {
     'host': 'ttt-host-page',
     'guest': 'ttt-guest-page',
     'game': 'ttt-game-page',
+    'game-over': 'ttt-finish-page'
   }
 
   constructor() {

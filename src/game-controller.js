@@ -1,6 +1,7 @@
 import { WebRtcService } from './services/web-rtc.service.js';
-import { CELL_STATE, GAME_STAGE, ROLE } from './enums.js';
+import { CELL_STATE, GAME_RESULT, GAME_STAGE, ROLE } from './enums.js';
 import { Observable } from './helpers/observable.js';
+import { GameHelper } from './helpers/game.helper.js';
 
 export class GameController {
   myRole = ROLE.HOST;
@@ -99,6 +100,10 @@ export class GameController {
 
   initGame() {
     this.gameBoard = Array(9).fill(0);
+
+    // randomly select who goes first
+    this.turn = Math.random() > 0.5 ? ROLE.HOST : ROLE.GUEST;
+
     this.gameStage = GAME_STAGE.STARTED;
 
     window.location.hash = '#game';
@@ -131,8 +136,34 @@ export class GameController {
 
     this.gameBoard[index] = this.sides[role];
     this.turn = this.turn === ROLE.HOST ? ROLE.GUEST : ROLE.HOST;
+
+    const winner = GameHelper.tryToGetWinner(this.gameBoard);
+    if (winner || !GameHelper.areThereAvailableMoves(this.gameBoard)) {
+      this.gameStage = GAME_STAGE.FINISHED;
+      window.location.hash = '#game-over';
+      return true;
+    }
+
     this.update$.next();
 
     return true;
+  }
+
+  /**
+   * Returns the game winner
+   * @returns {number}
+   */
+  getGameResult() {
+    const result = GameHelper.tryToGetWinner(this.gameBoard);
+
+    if (result === CELL_STATE.Empty) {
+      return GAME_RESULT.DRAW;
+    }
+
+    if (result === this.sides[this.myRole]) {
+      return GAME_RESULT.WIN;
+    }
+
+    return GAME_RESULT.LOSE;
   }
 }
