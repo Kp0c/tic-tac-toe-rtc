@@ -1,3 +1,5 @@
+import './main.css';
+
 import { App } from './components/app/app.js';
 import { StartPage } from './components/start-page/start-page.js';
 import { HostPage } from './components/host-page/host-page.js';

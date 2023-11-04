@@ -33,6 +33,7 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 - Make move and sync it with the opponent
 - Win/loss/draw message
 - Randomly decide who goes first
+- Show who plays what and whose turn is right now
 
 ## How to run
 1. Clone the repo
@@ -51,7 +52,7 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
     - Player 2 can connect to the link to establish connection
     - Once player 2 connects, game starts
 - [x] Create 3x3 grid
-- [ ] Starting the game
+- [x] Starting the game
   - Players decide who goes first by mutual agreement or a random method implemented by the developer.
   - The interface shows which player's turn it is.
 - [ ] During the game

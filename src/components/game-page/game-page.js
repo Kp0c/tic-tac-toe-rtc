@@ -1,7 +1,7 @@
 import template from './game-page.html?raw';
 import styles from './game-page.css?inline'
 import { BaseComponent } from '../base-component.js';
-import { CELL_STATE, GAME_STAGE } from '../../enums.js';
+import { CELL_STATE, GAME_STAGE, ROLE } from '../../enums.js';
 
 export class GamePage extends BaseComponent {
   /**
@@ -57,6 +57,20 @@ export class GamePage extends BaseComponent {
       }
 
       container.appendChild(box);
+    }
+
+    const turn = this.shadowRoot.getElementById('turn');
+    turn.textContent = this.#gameController.turn === this.#gameController.myRole
+      ? 'Your turn'
+      : 'Opponent\'s turn';
+
+    const isHost = this.#gameController.myRole === ROLE.HOST;
+    if (isHost) {
+      this.shadowRoot.getElementById('you-host').hidden = false;
+      this.shadowRoot.getElementById('you-guest').hidden = true;
+    } else {
+      this.shadowRoot.getElementById('you-host').hidden = true;
+      this.shadowRoot.getElementById('you-guest').hidden = false;
     }
   }
 }
