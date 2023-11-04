@@ -60,10 +60,18 @@ export class Observable {
     }
   }
 
+  /**
+   * Unsubscribe from the observable
+   * @param callback
+   */
   unsubscribe(callback) {
     this.#observers = this.#observers.filter(observer => observer !== callback);
   }
 
+  /**
+   * Emit a new value to the observers.
+   * @param value
+   */
   next(value) {
     this.#latestValue = value;
     this.#observers.forEach((observer) => observer(value));

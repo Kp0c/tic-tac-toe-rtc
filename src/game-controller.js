@@ -3,8 +3,15 @@ import { CELL_STATE, GAME_RESULT, GAME_STAGE, ROLE } from './enums.js';
 import { Observable } from './helpers/observable.js';
 import { GameHelper } from './helpers/game.helper.js';
 
+/**
+ * Game Controller. Manages the game state
+ */
 export class GameController {
-  myRole = ROLE.HOST;
+  /**
+   * My role
+   * @type {number}
+   */
+  myRole = ROLE.NONE;
 
   /**
    * Current Game State
@@ -65,7 +72,7 @@ export class GameController {
   errors$ = new Observable();
 
   /**
-   *
+   * WebRTC Service
    * @type {WebRtcService}
    */
   #webRtcService = new WebRtcService();
@@ -98,16 +105,32 @@ export class GameController {
     });
   }
 
+  /**
+   * Starts hosting a game
+   * @returns {Promise<void>}
+   */
   async startHost() {
     await this.#webRtcService.startHost();
 
     this.myRole = ROLE.HOST;
   }
 
+  /**
+   * Sets the answer code provided by the guest.
+   *
+   * @param {string} answerCode
+   * @returns {Promise<void>}
+   */
   async setAnswerCode(answerCode) {
     await this.#webRtcService.setAnswer(answerCode);
   }
 
+  /**
+   * Joins a game via the connection code provided by the host.
+   *
+   * @param {string} connectionCode
+   * @returns {Promise<void>}
+   */
   async joinViaConnectionCode(connectionCode) {
     try {
       await this.#webRtcService.joinViaConnectionCode(connectionCode);
@@ -118,6 +141,9 @@ export class GameController {
     }
   }
 
+  /**
+   * Initializes the game. Cleans up the state, randomly selects who goes first
+   */
   initGame() {
     this.playAgainAgreedRoles = [];
     this.gameBoard = Array(9).fill(0);
@@ -136,10 +162,17 @@ export class GameController {
     }
   }
 
+  /**
+   * Starts the game
+   */
   startGame() {
     window.location.hash = '#game';
   }
 
+  /**
+   * Makes a move
+   * @param index
+   */
   makeMove(index) {
     const result = this.markMove(index, this.myRole);
 
@@ -208,6 +241,9 @@ export class GameController {
     return GAME_RESULT.LOSE;
   }
 
+  /**
+   * Requests to play again
+   */
   playAgain() {
     this.#webRtcService.sendMessage({
       type: 'play-again',
@@ -216,6 +252,12 @@ export class GameController {
     this.markPlayAgain(this.myRole);
   }
 
+  /**
+   * Marks that the player is ready to play again
+   * Starts the game if both players are ready
+   *
+   * @param role
+   */
   markPlayAgain(role) {
     if (!this.playAgainAgreedRoles.includes(role)) {
       this.playAgainAgreedRoles.push(role);
@@ -227,12 +269,19 @@ export class GameController {
     }
   }
 
+  /**
+   * Clears the state to prepare for a completely new game (with a new opponent)
+   */
   newGame() {
     this.#webRtcService.close();
     this.#webRtcService = new WebRtcService();
     window.location.hash = '';
   }
 
+  /**
+   * Handles errors
+   * @param error
+   */
   #handleError(error) {
     // We cannot proceed when RTCErrorEvent or 'InvalidStateError' happened. It's fatal. So we need to stop the game
     if (error instanceof RTCErrorEvent || error.name === 'InvalidStateError') {
