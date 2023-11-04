@@ -82,16 +82,7 @@ export class GameController {
     });
 
     this.#webRtcService.errors$.subscribe((error) => {
-      // We cannot proceed when RTCErrorEvent happened. It's fatal. So we need to stop the game
-      if (error instanceof RTCErrorEvent) {
-        error = 'Connection error. Please start a new game';
-        this.gameStage = GAME_STAGE.NONE;
-        this.#webRtcService.close();
-        this.#webRtcService = new WebRtcService();
-
-        this.update$.next();
-      }
-      this.errors$.next(error);
+      this.#handleError(error);
     });
 
     this.#webRtcService.messages$.subscribe((message) => {
@@ -123,7 +114,7 @@ export class GameController {
 
       this.myRole = ROLE.GUEST;
     } catch (err) {
-      this.errors$.next(err.message);
+      this.#handleError(err);
     }
   }
 
@@ -234,5 +225,24 @@ export class GameController {
     if (this.playAgainAgreedRoles.length === 2) {
       this.initGame();
     }
+  }
+
+  newGame() {
+    this.#webRtcService.close();
+    this.#webRtcService = new WebRtcService();
+    window.location.hash = '';
+  }
+
+  #handleError(error) {
+    // We cannot proceed when RTCErrorEvent or 'InvalidStateError' happened. It's fatal. So we need to stop the game
+    if (error instanceof RTCErrorEvent || error.name === 'InvalidStateError') {
+      error = 'Connection error. Please start a new game';
+      this.gameStage = GAME_STAGE.NONE;
+      this.#webRtcService.close();
+      this.#webRtcService = new WebRtcService();
+
+      this.update$.next();
+    }
+    this.errors$.next(error);
   }
 }

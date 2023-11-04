@@ -37,6 +37,7 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 - Users can start playing again without new WebRTC connection
 - Error handling
 - Responsive UI
+- Start a new game from game over screen
 
 ## Known issues
 - Copy is not working on mobile
@@ -50,27 +51,4 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 1. Clone the repo
 2. Run `npm install`
 3. Run `npm run test`
-
-# TODO
-- [x] WebRTC connection
-- [x] Connection setup
-    - Generate unique game session with a connection link or code
-    - Player 2 can connect to the link to establish connection
-    - Once player 2 connects, game starts
-- [x] Create 3x3 grid
-- [x] Starting the game
-  - Players decide who goes first by mutual agreement or a random method implemented by the developer.
-  - The interface shows which player's turn it is.
-- [x] During the game
-  - Click on empty square to make move
-  - the state is synced via WebRTC
-  - Win/loss/draw message
-- [x] Game ending
-  - Players can choose to play again without new WebRTC connection
-- [x] Error handling
-  - If a player loses connection, the game should end and the other player should be notified.
-  - If a player tries to make a move when it is not their turn, they should be notified.
-- [x] Mobile UI
-- [ ] Animations
-- [ ] New Game
 

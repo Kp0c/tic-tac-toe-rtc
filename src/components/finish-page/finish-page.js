@@ -32,6 +32,12 @@ export class FinishPage extends BaseComponent {
       signal: this.destroyedSignal,
     });
 
+    this.shadowRoot.getElementById('new-game').addEventListener('click', () => {
+      this.#gameController.newGame();
+    }, {
+      signal: this.destroyedSignal,
+    });
+
     this.#gameController.update$.subscribe(() => {
       this.#render();
     }, {

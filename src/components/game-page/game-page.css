@@ -28,11 +28,17 @@
 .box {
   width: var(--cell-size);
   height: var(--cell-size);
-  background-color: red;
+  background-color: #ddd;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 5px black;
+    background-color: #ccc;
+  }
 
   &.available {
     cursor: pointer;
