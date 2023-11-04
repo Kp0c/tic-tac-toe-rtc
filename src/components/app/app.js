@@ -26,6 +26,10 @@ export class App extends BaseComponent {
     });
 
     this.#selectRoute();
+
+    this.#gameController.errors$.subscribe((error) => {
+      console.error(error);
+    });
   }
 
   #selectRoute() {

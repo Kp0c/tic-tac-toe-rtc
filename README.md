@@ -56,11 +56,11 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
 - [x] Starting the game
   - Players decide who goes first by mutual agreement or a random method implemented by the developer.
   - The interface shows which player's turn it is.
-- [ ] During the game
+- [x] During the game
   - Click on empty square to make move
   - the state is synced via WebRTC
   - Win/loss/draw message
-- [ ] Game ending
+- [x] Game ending
   - Players can choose to play again without new WebRTC connection
 - [ ] Error handling
   - If a player loses connection, the game should end and the other player should be notified.
@@ -73,6 +73,5 @@ For tests it is using [Vitest](https://vitest.dev/) that is using [WebdriverIO](
   - If a player tries to make a move after the game has ended, they should be notified.
 - [ ] Mobile UI
 - [ ] Animations
+- [ ] New Game
 
-# Bugs
-- [ ] Random player start is not synced!

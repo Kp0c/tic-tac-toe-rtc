@@ -112,7 +112,15 @@ export class WebRtcService {
     await this.#peerConnection.setRemoteDescription(answerObject);
   }
 
-  sendMessage(message) {
+  sendMessage(message, retry = true) {
+    // retry sending message if data channel is not open yet (only once)
+    if (!this.#isDataChannelOpen) {
+      setTimeout(() => {
+        this.sendMessage(message, false);
+      }, 100);
+      return;
+    }
+
     if (!this.#isDataChannelOpen) {
       this.errors$.next('Data channel is not open');
       return;

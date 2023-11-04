@@ -91,6 +91,9 @@ export class GameController {
         this.markMove(message.index, opponentRole);
       } else if (message.type === 'play-again') {
         this.markPlayAgain(opponentRole);
+      } else if (message.type === 'start') {
+        this.turn = message.turn;
+        this.startGame();
       }
     });
   }
@@ -112,15 +115,23 @@ export class GameController {
   }
 
   initGame() {
+    if (this.myRole === ROLE.HOST) {
+      // randomly select who goes first
+      this.turn = Math.random() > 0.5 ? ROLE.HOST : ROLE.GUEST;
+
+      this.#webRtcService.sendMessage({
+        type: 'start',
+        turn: this.turn,
+      });
+    }
+
+    this.startGame();
+  }
+
+  startGame() {
     this.playAgainAgreedRoles = [];
-
     this.gameBoard = Array(9).fill(0);
-
-    // randomly select who goes first
-    this.turn = Math.random() > 0.5 ? ROLE.HOST : ROLE.GUEST;
-
     this.gameStage = GAME_STAGE.STARTED;
-
     window.location.hash = '#game';
   }
 
