@@ -1,5 +1,6 @@
 # Tic-Tac-Toe Game
 Created for Dev Challenge XX Final
+Deployed app: https://tic-tac-toe-rtc.vercel.app/
 
 
 ## Description
